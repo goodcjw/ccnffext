@@ -1,0 +1,2 @@
+component {412fbbf0-f5bc-4446-9ca7-52b1959c9036} components/libndn.dylib
+contract @mozilla.org/network/protocol;1?name=ndn {412fbbf0-f5bc-4446-9ca7-52b1959c9036}

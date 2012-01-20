@@ -1,0 +1,6 @@
+#include "nsIProtocolHandler.idl"
+
+[scriptable, uuid(B359FA8B-0E29-4C54-9B8B-D3E06C1DE675)]
+interface nsINDNProtocolHandler : nsIProtocolHandler
+{
+};

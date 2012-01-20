@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+	
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>goodcjw2@gmail.com</em:id>
+    <em:unpack>true</em:unpack>
+    <em:version>0.1</em:version>
+	
+    <em:targetApplication>
+      <!-- Firefox -->
+      <Description>
+	<em:id>toolkit@mozilla.org</em:id>
+	<em:minVersion>7.0.1</em:minVersion>
+	<em:maxVersion>12.0a1</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+	
+    <!-- front-end metadata -->
+    <em:name>First NDN Extension</em:name>
+    <em:description>Just an example for a NDN protocol handler.</em:description>
+    <em:creator>Jiwen Cai</em:creator>
+    <em:homepageURL>http://jiwen.info</em:homepageURL>
+  </Description>
+</RDF>
