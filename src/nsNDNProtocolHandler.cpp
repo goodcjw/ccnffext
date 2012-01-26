@@ -1,11 +1,10 @@
 #include "nsNDNProtocolHandler.h"
 #include "nsIURL.h"
-//#include "nsIClassInfoImpl.h"
 #include "nsNetUtil.h"
 #include "nsNetCID.h"
-//#include "nsStandardURL.h"
+#include "nsNDNChannel.h"
+#include "nsAutoPtr.h"
 
-//NS_IMPL_CLASSINFO(nsNDNProtocolHandler, NULL, 0, NS_NDNHANDLER_CID)
 NS_IMPL_ISUPPORTS2(nsNDNProtocolHandler,
                    nsIProtocolHandler,
                    nsINDNProtocolHandler);
@@ -55,17 +54,6 @@ NS_IMETHODIMP nsNDNProtocolHandler::NewURI(const nsACString & aSpec,
                                            nsIURI * *result) {
   nsresult rv;
   NS_ASSERTION(!aBaseURI, "base url passed into ndn protocol handler");
-  /*
-  nsStandardURL* url = new nsStandardURL();
-  if (!url)
-    return NS_ERROR_OUT_OF_MEMORY;
-  NS_ADDREF(url);
-  rv = url->Init(nsIStandardURL::URLTYPE_STANDARD, -1, aSpec, aCharset, aBaseURI);
-  if (NS_SUCCEEDED(rv))
-    rv = CallQueryInterface(url, result);
-  NS_RELEASE(url);
-
-  */
   nsIURI* url;
   rv = CallCreateInstance(NS_SIMPLEURI_CONTRACTID, &url);
   if (NS_FAILED(rv))
@@ -84,9 +72,19 @@ NS_IMETHODIMP nsNDNProtocolHandler::NewChannel(nsIURI *aURI,
                                                nsIChannel * *result) {
   nsresult rv;
   nsCAutoString tag("http://twitter.com/goodcjw");
+  /*
   nsCOMPtr<nsIURI> uri;
   rv = mIOService->NewURI(tag, nsnull, nsnull,
                           getter_AddRefs(uri));
   rv = mIOService->NewChannel(tag, nsnull, nsnull, result);
-  return NS_OK;
+  */
+  nsRefPtr<nsNDNChannel> channel;
+  channel = new nsNDNChannel(aURI);
+
+  rv = channel->Init();
+  if (NS_FAILED(rv)) {
+    return rv;
+  }
+  channel.forget(result);
+  return rv;
 }

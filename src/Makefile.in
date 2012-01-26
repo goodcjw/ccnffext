@@ -71,14 +71,17 @@ MODULE_NAME	= ndn
 XPI_NAME	= ndn
 
 # CPPSRCS specifies C++ files to be built into a library.
-CPPSRCS		=		   \
-		nsNDNProtocolHandler.cpp	   \
-		nsNDNProtocolHandlerModule.cpp	   \
+CPPSRCS		=				\
+		nsNDNProtocolHandler.cpp	\
+		nsNDNProtocolHandlerModule.cpp	\
+		nsNDNChannel.cpp		\
 		$(NULL)
 
 # XPIDLSRCS specified IDL files. The build system runs the xpidl tool on these
 # files to generate C++ headers and .xpt typelib files.
-XPIDLSRCS	= nsINDNProtocolHandler.idl
+XPIDLSRCS	=				\
+		nsINDNProtocolHandler.idl	\
+		$(NULL)
 
 # EXTRA_DSO_LDOPTS specifies linker flags when building a shared library
 # from this Makefile. We link against the "dependent glue" and against the

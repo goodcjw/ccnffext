@@ -5,7 +5,7 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>goodcjw2@gmail.com</em:id>
     <em:unpack>true</em:unpack>
-    <em:version>0.1</em:version>
+    <em:version>0.2</em:version>
 	
     <em:targetApplication>
       <!-- Firefox -->
@@ -18,7 +18,10 @@
 	
     <!-- front-end metadata -->
     <em:name>First NDN Extension</em:name>
-    <em:description>Just an example for a NDN protocol handler.</em:description>
+    <em:description>
+      Just an example for a NDN protocol handler.
+      Add NDN channel now.
+    </em:description>
     <em:creator>Jiwen Cai</em:creator>
     <em:homepageURL>http://jiwen.info</em:homepageURL>
   </Description>
