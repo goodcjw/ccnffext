@@ -71,10 +71,12 @@ MODULE_NAME	= ndn
 XPI_NAME	= ndn
 
 # CPPSRCS specifies C++ files to be built into a library.
-CPPSRCS		=				\
-		nsNDNProtocolHandler.cpp	\
-		nsNDNProtocolHandlerModule.cpp	\
-		nsNDNChannel.cpp		\
+CPPSRCS		=		   \
+		nsNDNProtocolHandler.cpp	   \
+		nsNDNProtocolHandlerModule.cpp	   \
+		nsNDNChannel.cpp		   \
+		nsNDNInputStream.cpp		   \
+		nsNDNTransport.cpp		   \
 		$(NULL)
 
 # XPIDLSRCS specified IDL files. The build system runs the xpidl tool on these
