@@ -44,8 +44,11 @@ nsNDNChannel::BeginPumpingData() {
   }
   */
 
-  rv = nsInputStreamPump::Create(getter_AddRefs(mPump), stream, -1, -1, 0, 0,
-                                 true);
+  /*
+   * cannot use internal pump directly, try to use it as a DOM service instead
+   * rv = nsInputStreamPump::Create(getter_AddRefs(mPump), stream, -1, -1, 0, 0,
+   * true);
+   */
   if (NS_SUCCEEDED(rv))
     rv = mPump->AsyncRead(this, nsnull);
 

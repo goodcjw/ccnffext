@@ -74,6 +74,9 @@ XPI_NAME	= ndn
 CPPSRCS		=		   \
 		nsNDNProtocolHandler.cpp	   \
 		nsNDNProtocolHandlerModule.cpp	   \
+		nsNDNChannel.cpp		   \
+		nsNDNInputStream.cpp		   \
+		nsNDNTransport.cpp		   \
 		$(NULL)
 
 # XPIDLSRCS specified IDL files. The build system runs the xpidl tool on these
