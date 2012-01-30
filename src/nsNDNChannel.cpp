@@ -1,13 +1,16 @@
 #include "nsNDNChannel.h"
+#include "nsNDNCore.h"
+
 #include "nsILoadGroup.h"
 #include "nsIURL.h"
+
 #include <ccn/ccn.h>
 
 NS_IMPL_ISUPPORTS4(nsNDNChannel,
                    nsIChannel,
                    nsIRequest,
                    nsIStreamListener,
-                   nsIRequestObserver);
+                   nsIRequestObserver)
 
 nsNDNChannel::nsNDNChannel(nsIURI *aURI) {
   SetURI(aURI);
@@ -28,7 +31,7 @@ nsNDNChannel::BeginPumpingData() {
   nsCOMPtr<nsIChannel> channel;
 
   rv = OpenContentStream(true, getter_AddRefs(stream),
-                                  getter_AddRefs(channel));
+                         getter_AddRefs(channel));
 
   if (NS_FAILED(rv))
     return rv;
@@ -44,11 +47,8 @@ nsNDNChannel::BeginPumpingData() {
   }
   */
 
-  /*
-   * cannot use internal pump directly, try to use it as a DOM service instead
-   * rv = nsInputStreamPump::Create(getter_AddRefs(mPump), stream, -1, -1, 0, 0,
-   * true);
-   */
+  rv = nsInputStreamPump::Create(getter_AddRefs(mPump), stream, -1, -1, 0, 0,
+                                 true);
   if (NS_SUCCEEDED(rv))
     rv = mPump->AsyncRead(this, nsnull);
 
@@ -59,6 +59,21 @@ nsresult
 nsNDNChannel::OpenContentStream(bool async, nsIInputStream **stream,
                                 nsIChannel** channel) {
   // 
+  if (!async)
+    return NS_ERROR_NOT_IMPLEMENTED;
+
+  nsNDNCore *ndncore = new nsNDNCore();
+  if (!ndncore)
+    return NS_ERROR_OUT_OF_MEMORY;
+  NS_ADDREF(ndncore);
+
+  nsresult rv = ndncore->Init(this);
+  if (NS_FAILED(rv)) {
+    NS_RELEASE(ndncore);
+    return rv;
+  }
+
+  *stream = ndncore;
   return NS_OK;
 }
 
@@ -237,9 +252,9 @@ nsNDNChannel::Open(nsIInputStream **result) {
 NS_IMETHODIMP
 nsNDNChannel::AsyncOpen(nsIStreamListener *listener, nsISupports *ctxt) {
   // AsyncRead in old API?
-  //  return NS_ERROR_NOT_IMPLEMENTED;
   mListener = listener;
   mListenerContext = ctxt;
+  return NS_ERROR_NOT_IMPLEMENTED;
 }
 
 NS_IMETHODIMP

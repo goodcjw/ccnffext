@@ -5,30 +5,34 @@
 #include "nsIEventTarget.h"
 #include "nsCOMPtr.h"
 
+class nsNDNTransport;
+
 class nsNDNInputStream : public nsIAsyncInputStream {
 public:
-  NS_DECL_ISUPPORTS
+  NS_DECL_ISUPPORTS_INHERITED
   NS_DECL_NSIINPUTSTREAM
   NS_DECL_NSIASYNCINPUTSTREAM
 
-  nsNDNInputStream(bool nonBlocking)
-    : mStatus(NS_OK)
-    , mNonBlocking(nonBlocking) {
-  }
+  nsNDNInputStream(nsNDNTransport *);
+  virtual ~nsNDNInputStream();
 
-protected:
-  virtual ~nsNDNInputStream() {}
+  // called by the ndn transport on the ndn thread ??
+  void OnNDNReady(nsresult condition);
 
-private:
-  // Called from the base stream's AsyncWait method when a pending callback
-  // is installed on the stream.
-  void OnCallbackPending();
+  bool IsReferenced()     { return mReaderRefCnt > 0; }
+  nsresult Condition()    { return mCondition; }
+  //  PRUint64 ByteCount()    { return mByteCount; }
 
 private:
-  nsCOMPtr<nsIInputStreamCallback> mCallback;
-  nsCOMPtr<nsIEventTarget>         mCallbackTarget;
-  nsresult                         mStatus;
-  bool                             mNonBlocking;
+  nsNDNTransport                     *mTransport;
+  nsrefcnt                            mReaderRefCnt;
+  PRUint64                            mByteCount;
+
+  // access to these is protected by mTransport->mLock
+  nsresult                            mCondition;
+  nsCOMPtr<nsIInputStreamCallback>    mCallback;
+  PRUint32                            mCallbackFlags;
+
 };
 
 #endif // nsNDNInputStream_h__

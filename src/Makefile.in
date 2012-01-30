@@ -77,6 +77,8 @@ CPPSRCS		=		   \
 		nsNDNChannel.cpp		   \
 		nsNDNInputStream.cpp		   \
 		nsNDNTransport.cpp		   \
+		nsNDNError.cpp			   \
+		nsNDNCore.cpp			   \
 		$(NULL)
 
 # XPIDLSRCS specified IDL files. The build system runs the xpidl tool on these
@@ -90,6 +92,7 @@ XPIDLSRCS	=				\
 # frozen XPCOM shared library.
 EXTRA_DSO_LDOPTS = \
 		$(DIST)/lib/$(LIB_PREFIX)xpcomglue_s.$(LIB_SUFFIX) \
+		$(DIST)/lib/$(LIB_PREFIX)ccn.$(LIB_SUFFIX) \
 		$(XPCOM_FROZEN_LDOPTS) \
 		$(NSPR_LIBS) \
 		$(NULL)
