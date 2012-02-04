@@ -45,7 +45,9 @@ NS_IMETHODIMP
 nsNDNTransportService::Run() {
   gNDNThread = PR_GetCurrentThread();
 
-  nsIThread *thread = NS_GetCurrentThread();
+  nsIThread *thread;
+  nsresult rv = NS_GetCurrentThread(&thread);
+  if (NS_FAILED(rv)) return rv;
 
   for (;;) {
     bool pendingEvents = false;
