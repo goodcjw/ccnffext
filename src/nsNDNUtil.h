@@ -1,10 +1,12 @@
 #ifndef nsNDNUtil_h__
 #define nsNDNUtil_h__
 
+#include "nsIMemory.h"
+
 #define NS_DEFAULT_SEGMENT_SIZE 4096
 #define NS_DEFAULT_SEGMENT_COUNT 24
 
-static inline nsIMemry*
+static inline nsIMemory*
 NDN_GetSegmentAlloc(PRUint32 segsize) {
   // currently, we only use system allocator
   return nsnull;
