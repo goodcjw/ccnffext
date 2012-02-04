@@ -1,9 +1,9 @@
-#include "mozilla/Mutex.h"
-#include "nsStreamUtils.h"
-
 #include "nsNDNInputStream.h"
 #include "nsNDNTransport.h"
 #include "nsNDNError.h"
+
+#include "mozilla/Mutex.h"
+#include "nsNDNStreamUtils.h"
 
 using namespace mozilla;
 
@@ -152,8 +152,8 @@ nsNDNInputStream::AsyncWait(nsIInputStreamCallback *callback,
 
     if (callback && target) {
       nsCOMPtr<nsIInputStreamCallback> temp;
-      nsresult rv = NS_NewInputStreamReadyEvent(getter_AddRefs(temp),
-                                                callback, target);
+      nsresult rv = NDN_NewInputStreamReadyEvent(getter_AddRefs(temp),
+                                                 callback, target);
       if (NS_FAILED(rv)) return rv;
       mCallback = temp;
     }
