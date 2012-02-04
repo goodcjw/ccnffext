@@ -2,14 +2,14 @@
 #define nsNDNChannel_h__
 
 //#include "nsStringAPI.h"
-#include "nsString.h"
+#include "nsStringAPI.h"
 #include "nsIChannel.h"
 #include "nsIInputStream.h"
 #include "nsIIOService.h"
 #include "nsCOMPtr.h"
 #include "nsAutoPtr.h"
 
-#include "nsInputStreamPump.h"
+#include "nsIInputStreamPump.h"
 #include "nsIProgressEventSink.h"
 #include "nsIInterfaceRequestor.h"
 #include "nsIStreamListener.h"
@@ -70,7 +70,7 @@ private:
                              nsIChannel** channel);
 
 private:
-  nsRefPtr<nsInputStreamPump>         mPump;
+  nsRefPtr<nsIInputStreamPump>        mPump;
 
   nsCOMPtr<nsIURI>                    mOriginalURI;
   nsCOMPtr<nsIURI>                    mURI;

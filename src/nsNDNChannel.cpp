@@ -1,6 +1,7 @@
 #include "nsNDNChannel.h"
 #include "nsNDNCore.h"
 
+#include "nsNetUtil.h"
 #include "nsILoadGroup.h"
 #include "nsIURL.h"
 
@@ -47,7 +48,7 @@ nsNDNChannel::BeginPumpingData() {
   }
   */
 
-  rv = nsInputStreamPump::Create(getter_AddRefs(mPump), stream, -1, -1, 0, 0,
+  rv = NS_NewInputStreamPump(getter_AddRefs(mPump), stream, -1, -1, 0, 0,
                                  true);
   if (NS_SUCCEEDED(rv))
     rv = mPump->AsyncRead(this, nsnull);
