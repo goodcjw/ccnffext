@@ -1,13 +1,13 @@
-#include "nsNetSegmentUtils.h"
-#include "nsStreamUtils.h"
+#include "nsNDNUtil.h"
+#include "nsNDNError.h"
+#include "nsNDNTransport.h"
+#include "nsNDNTransportService.h"
 
+#include "nsNDNStreamUtils.h"
 #include "nsIPipe.h"
 
-#include "nsNDNTransport.h"
-#include "nsNDNError.h"
-
 NS_IMPL_ISUPPORTS1(nsNDNTransport,
-                   nsITransport);
+                   nsITransport)
 
 nsNDNTransport::nsNDNTransport()
     : mLock("nsNDNTransport.mLock"),
@@ -20,13 +20,21 @@ nsNDNTransport::nsNDNTransport()
       mNDNonline(false),
       mInputClosed(true),
       mInput(this) {
+
+  if (!gNDNTransportService) {
+    gNDNTransportService = new nsNDNTransportService();
+  }
+  gNDNTransportService->Init();
+  NS_ADDREF(gNDNTransportService);
 }
 
 nsNDNTransport::~nsNDNTransport() {
+  nsNDNTransportService *serv = gNDNTransportService;
+  NS_RELEASE(serv); // nulls argument
 }
 
 nsresult 
-nsNDNTransport::Init(const char *ndnName, PRUint32 typeCount) {
+nsNDNTransport::Init(const char *ndnName) {
   // the current implementation only allows one ccn name
   int res;
 
@@ -76,14 +84,19 @@ nsNDNTransport::OpenInputStream(PRUint32 flags,
   if (!(flags & OPEN_UNBUFFERED) || (flags & OPEN_BLOCKING)) {
     bool openBlocking = (flags & OPEN_BLOCKING);
 
-    net_ResolveSegmentParams(segsize, segcount);
-    nsIMemory *segalloc = net_GetSegmentAlloc(segsize);
+    NDN_ResolveSegmentParams(segsize, segcount);
+    nsIMemory *segalloc = NDN_GetSegmentAlloc(segsize);
 
     // create a pipe
     nsCOMPtr<nsIAsyncOutputStream> pipeOut;
-    rv = NS_NewPipe2(getter_AddRefs(pipeIn), getter_AddRefs(pipeOut),
+    rv = NDN_NewPipe2(getter_AddRefs(pipeIn), getter_AddRefs(pipeOut),
                      !openBlocking, true, segsize, segcount, segalloc);
     if (NS_FAILED(rv)) return rv;
+    // no callback for NS_AsyncCopy, the output will be directly push into the 
+    // pipe the thread at the other size of the pipe (pipeOut's OnInputStreamReady)
+    // should deal with callback.
+    rv = NDN_AsyncCopy(&mInput, pipeOut, gNDNTransportService,
+                       NDN_ASYNCCOPY_VIA_WRITESEGMENTS, segsize);
 
     *result = pipeIn;
 
