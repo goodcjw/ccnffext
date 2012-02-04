@@ -4,7 +4,7 @@
 
 //#include "nsIOService.h"
 #include "nsIURL.h"
-#include "nsStreamUtils.h"
+#include "nsNDNStreamUtils.h"
 
 PRUint32 gDefaultSegmentSize = 4096;
 PRUint32 gDefaultSegmentCount = 24;
@@ -47,7 +47,7 @@ nsNDNCore::Init(nsNDNChannel *channel) {
   nsCOMPtr<nsIURL> url = do_QueryInterface(mChannel->URI());
   rv = url->GetAsciiSpec(mInterest);
   // XXX temopry walkaround when nsNDNURL is absent
-  mInterest.Trim("y:", true, false, false);
+  mInterest.Trim("y:", true, false);
   if (NS_FAILED(rv))
     return rv;
 
@@ -66,8 +66,8 @@ nsNDNCore::DispatchCallback(bool async)
   // OnInputStreamReady implementation may call our AsyncWait method.
   nsCOMPtr<nsIInputStreamCallback> callback;
   if (async) {
-    NS_NewInputStreamReadyEvent(getter_AddRefs(callback), mCallback,
-                                mCallbackTarget);
+    NDN_NewInputStreamReadyEvent(getter_AddRefs(callback), mCallback,
+                                 mCallbackTarget);
     if (!callback)
       return;  // out of memory!
     mCallback = nsnull;
@@ -155,7 +155,7 @@ nsNDNCore::Available(PRUint32 *avail) {
 
 NS_IMETHODIMP
 nsNDNCore::Read(char *buf, PRUint32 count, PRUint32 *countRead) {
-  return ReadSegments(NS_CopySegmentToBuffer, buf, count, countRead);
+  return ReadSegments(NDN_CopySegmentToBuffer, buf, count, countRead);
 }
 
 NS_IMETHODIMP
@@ -164,8 +164,8 @@ nsNDNCore::ReadSegments(nsWriteSegmentFun writer, void *closure,
 
   // from nsFtpState
   if (mDataStream) {
-    nsWriteSegmentThunk thunk = { this, writer, closure };
-    return mDataStream->ReadSegments(NS_WriteSegmentThunk, &thunk,
+    nsNDNWriteSegmentThunk thunk = { this, writer, closure };
+    return mDataStream->ReadSegments(NDN_WriteSegmentThunk, &thunk,
                                      count, countRead);
   }
 

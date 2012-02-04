@@ -1,7 +1,7 @@
 #ifndef nsNDNCore_h__
 #define nsNDNCore_h__
 
-#include "nsString.h"
+#include "nsStringAPI.h"
 #include "nsCOMPtr.h"
 #include "nsAutoPtr.h"
 #include "nsIAsyncInputStream.h"
